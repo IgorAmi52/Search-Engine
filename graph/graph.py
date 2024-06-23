@@ -14,7 +14,7 @@ class Graph:
 
     def _validate_vertex(self, v):
         """Proverava da li je v čvor(Vertex) ovog grafa."""
-        if not isinstance(v, self.Vertex):
+        if not isinstance(v, Vertex):
             raise TypeError("Očekivan je objekat klase Vertex")
         if v not in self._outgoing:
             raise ValueError("Vertex ne pripada ovom grafu.")
@@ -73,6 +73,12 @@ class Graph:
         for edge in adj[v].values():
             yield edge
 
+    def get_vertex(self, vertex_id):
+        for vertex in self.vertices():
+            if vertex.get_id() == vertex_id:
+                return vertex
+        return None
+
     def insert_vertex(self, x=None):
         """Ubacuje i vraća novi čvor (Vertex) sa elementom x"""
         v = Vertex(x)
@@ -87,8 +93,7 @@ class Graph:
         Baca ValueError ako u i v nisu čvorovi grafa.
         Baca ValueError ako su u i v već povezani.
         """
-        if self.get_edge(u, v) is not None:  # uključuje i proveru greške
-            raise ValueError("u and v are already adjacent")
-        e = Edge(u, v, x)
-        self._outgoing[u][v] = e
-        self._incoming[v][u] = e
+        if self.get_edge(u, v) is None:  # uključuje i proveru greške
+            e = Edge(u, v, x)
+            self._outgoing[u][v] = e
+            self._incoming[v][u] = e
