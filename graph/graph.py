@@ -4,12 +4,7 @@ from graph.edge import Edge
 
 class Graph:
     def __init__(self, directed=False):
-        """Kreira prazan graf (podrazumevana vrednost je da je neusmeren).
-
-        Ukoliko se opcioni parametar directed postavi na True, kreira se usmereni graf.
-        """
         self._outgoing = {}
-        # ukoliko je graf usmeren, kreira se pomoćna mapa
         self._incoming = {} if directed else self._outgoing
 
     def _validate_vertex(self, v):
@@ -20,21 +15,15 @@ class Graph:
             raise ValueError("Vertex ne pripada ovom grafu.")
 
     def is_directed(self):
-        """Vraća True ako je graf usmeren; False ako je neusmeren."""
-        return (
-            self._incoming is not self._outgoing
-        )  # graf je usmeren ako se mape razlikuju
+        return self._incoming is not self._outgoing
 
     def vertex_count(self):
-        """Vraća broj čvorova u grafu."""
         return len(self._outgoing)
 
     def vertices(self):
-        """Vraća iterator nad svim čvorovima grafa."""
         return self._outgoing.keys()
 
     def edge_count(self):
-        """Vraća broj ivica u grafu."""
         total = sum(len(self._outgoing[v]) for v in self._outgoing)
         # ukoliko je graf neusmeren, vodimo računa da ne brojimo čvorove više puta
         return total if self.is_directed() else total // 2

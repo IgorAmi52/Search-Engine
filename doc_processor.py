@@ -18,34 +18,38 @@ class DocumentProcessor:
             if page_num < self.skip_pages:
                 continue
             page = doc.load_page(page_num)
-            self.page_proccessing(page.get_text(), page_num - self.skip_pages + 1)
-            self.word_proccessing(page.get_text(), page_num - self.skip_pages + 1)
+
+            self.page_proccessing(page, page_num - self.skip_pages + 1)
+            self.word_proccessing(page, page_num - self.skip_pages + 1)
 
         return self.graph, self.trie
 
-    def page_proccessing(self, text, page_num):
-        page = self.graph.get_vertex(page_num)
-        if page:  ## if page added by reference
-            page.set_element(
+    def page_proccessing(self, page, page_num):
+        text = page.get_text()
+        vertex = None
+        pageVertex = self.graph.get_vertex(page_num)
+        if pageVertex:  ## if page added by reference
+            pageVertex.set_element(
                 {
                     "id": page_num,
                     "content": text,
-                    "paragraphs": self.split_text_into_paragraphs(text),
                 }
             )
+            vertex = pageVertex
         else:
-            page = {
+            pageVertexData = {
                 "id": page_num,
                 "content": text,
-                "paragraphs": self.split_text_into_paragraphs(text),
             }
-            vertex = self.graph.insert_vertex(page)
+            vertex = self.graph.insert_vertex(pageVertexData)
 
+        self.add_page_references(vertex, page)
+
+    def add_page_references(self, vertex, page):
         page_references = self.search_for_page_reference(
-            text
+            page
         )  ## search for page references
         for ref in page_references:
-            print(ref)
             ref_vertex = self.graph.get_vertex(ref)
             if ref_vertex:  ### if page added by reference
                 self.graph.insert_edge(vertex, ref_vertex)
@@ -53,28 +57,25 @@ class DocumentProcessor:
                 ref_page = {
                     "id": ref,
                     "content": "",
-                    "paragraphs": [],
                 }
                 ref_vertex = self.graph.insert_vertex(ref_page)
                 self.graph.insert_edge(vertex, ref_vertex)
 
-    def word_proccessing(self, text, page_num):
-        words = text.split()
+    def word_proccessing(self, page, page_num):
+        words = [word[4] for word in page.get_text("words")]
         for word in words:
             self.trie.insert(word, page_num)
 
-    def split_text_into_paragraphs(self, text):
-        paragraphs = text.split("\n\n")
-        paragraphs = [p.strip() for p in paragraphs if p.strip()]
-        return paragraphs
-
-    def search_for_page_reference(self, text):
-        words = text.split()
+    def search_for_page_reference(self, page):
+        words = [word[4] for word in page.get_text("words")]
         page_refrences = []
         for index, word in enumerate(words):
-            if "page" in word and (words[index + 1][0].isdigit()):
-                page_num = words[index + 1]
-                while not page_num.isdigit():
-                    page_num = page_num[:-1]
-                page_refrences.append(int(page_num))
+            try:
+                if "page" in word and (words[index + 1][0].isdigit()):
+                    page_num = words[index + 1]
+                    while not page_num.isdigit():
+                        page_num = page_num[:-1]
+                    page_refrences.append(int(page_num))
+            except IndexError:
+                pass
         return page_refrences

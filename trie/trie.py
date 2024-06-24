@@ -12,6 +12,9 @@ class Trie:
     def insert(self, word, doc_id):
         node = self.root
         for char in word:
+            if not char.isalpha():
+                continue
+            char = char.lower()
             if char not in node.children:
                 node.children[char] = TrieNode()
             node = node.children[char]
