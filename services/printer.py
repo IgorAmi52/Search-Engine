@@ -13,7 +13,7 @@ class Printer:
         sorted_keys = self.get_sorted_keys(score)
         if len(sorted_keys) == 0:
             print("No results found! \n")
-            return
+            return None
         i = 0
         while True:
             for j in range(5):
@@ -30,6 +30,8 @@ class Printer:
             if option != "next":
                 break
             os.system("clear")
+
+        return sorted_keys
 
     def _print_result(self, key, words):
         page = self._graph.get_vertex(key).get_element()
@@ -65,4 +67,4 @@ class Printer:
         print("Autocomplete suggestions: \n")
         for index, suggestion in enumerate(suggestions):
             print(suggestion, end=", " if index < len(suggestions) - 1 else " ")
-        input("\nPress Enter to continue.")
+        input("\nPress Enter to continue: ")
