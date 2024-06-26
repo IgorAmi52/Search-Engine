@@ -1,3 +1,6 @@
+import random
+
+
 class TrieNode:
     def __init__(self):
         self.parent = None
@@ -36,18 +39,15 @@ class Trie:
 
     def find_potential_word(self, word):
         node = self.root
-        word_shallow = True
+        pot_word = ""
         for char in word:  ### find the longest prefix of the word that is in the trie
             if char not in node.children:
-                word_shallow = False
                 break
+            pot_word += char
             node = node.children[char]
-        if not word_shallow:  ### if the word is not in the trie, find the longest prefix that is in the trie
-            while not node.is_end_of_word and node.children:
-                node = node.parent
-                word = word[:-1]
-        while not node.is_end_of_word:  ### find the word that is in the trie
-            next_char = list(node.children.keys())[0]
+
+        while len(node.children) != 0:  ### find the word that is in the trie
+            next_char = random.choice(list(node.children.keys()))
             node = node.children[next_char]
-            word += next_char
-        return word
+            pot_word += next_char
+        return pot_word

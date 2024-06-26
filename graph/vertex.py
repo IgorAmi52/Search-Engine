@@ -13,6 +13,9 @@ class Vertex:
     def set_element(self, x):
         self._element = x
 
+    def get_element(self):
+        return self._element["content"]
+
     def get_id(self):
         return self._element["id"]
 
