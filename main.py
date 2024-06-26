@@ -30,6 +30,10 @@ def main():
         phrase = input("Please enter a phrase to search or exit to exit: ")
         if phrase == "exit":
             break
+        if phrase[-1] == "*":
+            suggestions = trie.find_suggestions(phrase[:-1])
+            printer.print_suggestions(suggestions)
+            continue
         score, important_words = finder.find(phrase)
         if score is not None:
             printer.print_best_results(score, important_words)

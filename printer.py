@@ -57,3 +57,12 @@ class Printer:
             if score[key] > 0:
                 ret.append(key)
         return sorted(ret, key=lambda x: score[x], reverse=True)
+
+    def print_suggestions(self, suggestions):
+        if not suggestions:
+            input("No suggestions found.")
+            return
+        print("Autocomplete suggestions: \n")
+        for index, suggestion in enumerate(suggestions):
+            print(suggestion, end=", " if index < len(suggestions) - 1 else " ")
+        input("\nPress Enter to continue.")

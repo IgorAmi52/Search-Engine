@@ -51,3 +51,19 @@ class Trie:
             node = node.children[next_char]
             pot_word += next_char
         return pot_word
+
+    def find_suggestions(self, word, node=None, suggestions=[]):
+        if node is None:  ### if the function is called for the first time
+            node = self.root
+            for char in word:
+                if char not in node.children:
+                    return {}
+                node = node.children[char]
+
+        for char in node.children:
+            word += char
+            self.find_suggestions(word, node.children[char], suggestions)
+            word = word[:-1]
+        if node.is_end_of_word:
+            suggestions.append(word)
+        return suggestions
