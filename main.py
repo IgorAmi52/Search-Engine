@@ -9,10 +9,10 @@ from services.writer import Writer
 
 def main():
     try:
-        with open("parsed_data/graph.dill", "rb") as json_file:
-            graph = dill.load(json_file)
-        with open("parsed_data/trie.dill", "rb") as json_file:
-            trie = dill.load(json_file)
+        with open("parsed_data/graph.dill", "rb") as dill_file:
+            graph = dill.load(dill_file)
+        with open("parsed_data/trie.dill", "rb") as dill_file:
+            trie = dill.load(dill_file)
     except FileNotFoundError:
         pdf_processor = DocumentProcessor()
         graph, trie = pdf_processor.get_proccessed_pdf(

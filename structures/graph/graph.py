@@ -1,5 +1,5 @@
-from graph.vertex import Vertex
-from graph.edge import Edge
+from structures.graph.vertex import Vertex
+from structures.graph.edge import Edge
 
 
 class Graph:

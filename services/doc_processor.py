@@ -1,7 +1,7 @@
 import fitz
 
-from graph.graph import Graph
-from trie.trie import Trie
+from structures.graph.graph import Graph
+from structures.trie.trie import Trie
 
 
 class DocumentProcessor:

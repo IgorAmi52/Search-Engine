@@ -1,4 +1,4 @@
-from graph.vertex import Vertex
+from structures.graph.vertex import Vertex
 
 
 class Edge:

@@ -12,7 +12,7 @@ class Printer:
     def print_best_results(self, score, words):
         sorted_keys = self.get_sorted_keys(score)
         if len(sorted_keys) == 0:
-            print("No results found! \n")
+            input("No results found! \n")
             return None
         i = 0
         while True:
