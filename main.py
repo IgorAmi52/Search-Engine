@@ -15,6 +15,7 @@ def main():
             trie = dill.load(dill_file)
     except FileNotFoundError:
         pdf_processor = DocumentProcessor()
+
         graph, trie = pdf_processor.get_proccessed_pdf(
             "data/Data Structures and Algorithms in Python.pdf", 22
         )
@@ -43,7 +44,7 @@ def main():
         if sorted_keys is not None:
             option, _ = pick.pick(["Yes", "No"], "Do you want to save the results?")
             if option == "Yes":
-                writer.create_pdf(sorted_keys)
+                writer.narrow_and_create_pdf(sorted_keys, important_words)
 
 
 if __name__ == "__main__":

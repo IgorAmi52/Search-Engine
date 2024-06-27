@@ -11,7 +11,7 @@ class Finder:
         score, important_words, brackets_score, _ = self.find_recursive(items, 0, [])
         if brackets_score != 0:
             print("Brackets are not balanced.")
-            return None, None
+            return {}, []
         return score, important_words
 
     def find_recursive(self, items, brackets_score, important_words, i=0):
@@ -52,7 +52,7 @@ class Finder:
                     if option == "Yes":
                         items[i] = pot_word
                         continue
-                    return None, None
+                    return {}, [], 0, 0
             if operation is None:
                 score = self.add_graph_score(temp_score)
                 ### first score
