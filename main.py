@@ -31,7 +31,7 @@ def main():
     while True:
         os.system("clear")
         phrase = input("Please enter a phrase to search or exit to exit: ")
-        if phrase == "exit":  ### exit the program
+        if phrase == "exit" or phrase == "":  ### exit the program
             break
         if phrase[-1] == "*":  ### if the phrase ends with * then find suggestions
             suggestions = trie.find_suggestions(phrase[:-1])
@@ -39,7 +39,8 @@ def main():
             continue
 
         score, important_words = finder.find(phrase)
-
+        if score is None:  ### if user doesn't select suggested word
+            continue
         sorted_keys = printer.print_best_results(score, important_words)
         if sorted_keys is not None:
             option, _ = pick.pick(["Yes", "No"], "Do you want to save the results?")

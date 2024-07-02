@@ -1,4 +1,5 @@
 from pick import pick
+import os
 
 
 class Finder:
@@ -9,8 +10,14 @@ class Finder:
     def find(self, phrase):
         items = self.process_phrase(phrase)
         score, important_words, brackets_score, _ = self.find_recursive(items, 0, [])
+
+        if score is None:
+            os.system("clear")
+            return None, None
+
         if brackets_score != 0:
-            print("Brackets are not balanced.")
+            os.system("clear")
+            input("Brackets are not balanced.")
             return {}, []
         return score, important_words
 
@@ -38,6 +45,8 @@ class Finder:
                         important_words,
                     )
                 )
+                if temp_score is None:
+                    return None, None, 0, 0
                 i += index
             elif items[i] == ")":
                 return score, important_words, brackets_score - 1, i + 1
@@ -46,13 +55,12 @@ class Finder:
                     temp_score = self.get_trie_score(items[i])
                     important_words.append(items[i])
                 except ValueError as e:  ### if word not found
-                    print(e)
                     pot_word = self.trie.find_potential_word(items[i])
                     option, _ = pick(["Yes", "No"], "Did you mean: " + pot_word + "?")
                     if option == "Yes":
                         items[i] = pot_word
                         continue
-                    return {}, [], 0, 0
+                    return None, None, 0, 0
             if operation is None:
                 score = self.add_graph_score(temp_score)
                 ### first score
@@ -64,18 +72,25 @@ class Finder:
                 score = self.get_complement_score_dict(score, temp_score)
             operation = None
             i += 1
-        return score, important_words, brackets_score, None
+        return score, important_words, brackets_score, 0
 
     def process_phrase(self, phrase):
         raw_words = phrase.split()
         ret = []
         for word in raw_words:
             word = word.lower()
-            if word[0] == "(":
-                ret.append("(")
-            elif word[-1] == ")":
-                ret.append(word[:-1])
-                ret.append(")")
+            if word[0] == "(":  ### if the word starts with (
+                while word[0] == "(":
+                    ret.append("(")
+                    word = word[1:]  ### remove the (
+            elif word[-1] == ")":  ### if the word ends with )
+                count = 0
+                while word[-1] == ")":
+                    count += 1
+                    word = word[:-1]  ### remove the )
+                ret.append(self.keep_only_alpha(word))
+                for i in range(count):
+                    ret.append(")")
                 continue
             elif word == "and":
                 ret.append("&")
