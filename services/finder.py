@@ -18,7 +18,7 @@ class Finder:
         if brackets_score != 0:
             os.system("clear")
             input("Brackets are not balanced.")
-            return {}, []
+            return None, None
         return score, important_words
 
     def find_recursive(self, items, brackets_score, important_words, i=0):
