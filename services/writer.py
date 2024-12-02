@@ -10,7 +10,7 @@ class Writer:
         page_keys,
         highlight_words,
         input_pdf="data/Data Structures and Algorithms in Python.pdf",
-        output_pdf="output.pdf",
+        output_pdf="output/output.pdf",
         skip_pages=22,
     ):
         pdf_document = fitz.open(input_pdf)
