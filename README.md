@@ -1,6 +1,6 @@
 # Search Engine
 
-This is an open-source search engine project that uses the **PageRank algorithm** to return the best page results from a parsed PDF file. The project was developed during my **first-year Algorithm and Data Structures course**.
+This is an open-source search engine project that uses the **PageRank algorithm** to return the best page results from a parsed PDF file.
 
 ---
 
